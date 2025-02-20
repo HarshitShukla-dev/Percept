@@ -8,8 +8,8 @@ export const UserController = {
         try {
             await client.query('BEGIN');
 
-            const id = req.auth?.id;
-            const email = req.auth?.email;
+            const id = req.auth?.userId;
+            const email = req.auth?.sessionClaims?.email as string | undefined;
 
             if (!id || !email) {
                 res.status(401).json({ success: false, error: 'Unauthorized' });

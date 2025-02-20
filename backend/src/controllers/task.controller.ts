@@ -62,5 +62,35 @@ export const TaskController = {
             res.status(500).json({ success: false, error: 'Failed to update task' });
             return
         }
+    },
+
+    async deleteTask(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const task = await TaskModel.delete(parseInt(id));
+            if (!task) {
+                res.status(404).json({ success: false, error: 'Task not found' });
+                return;
+            }
+            res.json({ success: true, data: task });
+        } catch (error) {
+            console.error("Error deleting task:", error);
+            res.status(500).json({ success: false, error: 'Failed to delete task' });
+        }
+    },
+
+    async getTaskById(req: Request, res: Response) {
+        try {
+            const { id } = req.params;
+            const task = await TaskModel.findById(parseInt(id));
+            if (!task) {
+                res.status(404).json({ success: false, error: 'Task not found' });
+                return;
+            }
+            res.json({ success: true, data: task });
+        } catch (error) {
+            console.error("Error getting task by ID:", error);
+            res.status(500).json({ success: false, error: 'Failed to get task' });
+        }
     }
 };
