@@ -1,15 +1,14 @@
 import pool from '../config/db';
 
 async function initializeDatabase() {
+  try {
+    const client = await pool.connect();
+
     try {
-        // Begin transaction
-        const client = await pool.connect();
+      await client.query('BEGIN');
 
-        try {
-            await client.query('BEGIN');
-
-            // Create users table
-            await client.query(`
+      // Create users table
+      await client.query(`
         CREATE TABLE IF NOT EXISTS users (
           id VARCHAR(255) PRIMARY KEY,
           email VARCHAR(255) UNIQUE NOT NULL,
@@ -17,26 +16,28 @@ async function initializeDatabase() {
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
       `);
-            console.log('Users table created');
+      console.log('Users table created');
 
-            // Create meetings table
-            await client.query(`
+      // Create meetings table
+      await client.query(`
         CREATE TABLE IF NOT EXISTS meetings (
           id SERIAL PRIMARY KEY,
           user_id VARCHAR(255) REFERENCES users(id),
           title VARCHAR(255),
           transcript TEXT,
           summary TEXT,
-          meeting_date TIMESTAMP WITH TIME ZONE,
-          participants TEXT[],
+          meeting_date DATE,
+          meeting_time TIME,
+          key_points JSONB,
+          participants JSONB,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
       `);
-            console.log('Meetings table created');
+      console.log('Meetings table created');
 
-            // Create tasks table
-            await client.query(`
+      // Create tasks table
+      await client.query(`
         CREATE TABLE IF NOT EXISTS tasks (
           id SERIAL PRIMARY KEY,
           user_id VARCHAR(255) REFERENCES users(id),
@@ -49,10 +50,10 @@ async function initializeDatabase() {
           updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         );
       `);
-            console.log('Tasks table created');
+      console.log('Tasks table created');
 
-            // Create updated_at trigger function
-            await client.query(`
+      // Create updated_at trigger function
+      await client.query(`
         CREATE OR REPLACE FUNCTION update_updated_at_column()
         RETURNS TRIGGER AS $$
         BEGIN
@@ -62,8 +63,8 @@ async function initializeDatabase() {
         $$ language 'plpgsql';
       `);
 
-            // Create triggers
-            await client.query(`
+      // Create triggers
+      await client.query(`
         DROP TRIGGER IF EXISTS update_users_updated_at ON users;
         CREATE TRIGGER update_users_updated_at
           BEFORE UPDATE ON users
@@ -71,7 +72,7 @@ async function initializeDatabase() {
           EXECUTE FUNCTION update_updated_at_column();
       `);
 
-            await client.query(`
+      await client.query(`
         DROP TRIGGER IF EXISTS update_meetings_updated_at ON meetings;
         CREATE TRIGGER update_meetings_updated_at
           BEFORE UPDATE ON meetings
@@ -79,7 +80,7 @@ async function initializeDatabase() {
           EXECUTE FUNCTION update_updated_at_column();
       `);
 
-            await client.query(`
+      await client.query(`
         DROP TRIGGER IF EXISTS update_tasks_updated_at ON tasks;
         CREATE TRIGGER update_tasks_updated_at
           BEFORE UPDATE ON tasks
@@ -87,20 +88,19 @@ async function initializeDatabase() {
           EXECUTE FUNCTION update_updated_at_column();
       `);
 
-            await client.query('COMMIT');
-            console.log('Database initialized successfully');
-        } catch (error) {
-            await client.query('ROLLBACK');
-            throw error;
-        } finally {
-            client.release();
-        }
+      await client.query('COMMIT');
+      console.log('Database initialized successfully');
     } catch (error) {
-        console.error('Error initializing database:', error);
+      await client.query('ROLLBACK');
+      throw error;
     } finally {
-        await pool.end();
+      client.release();
     }
+  } catch (error) {
+    console.error('Error initializing database:', error);
+  } finally {
+    await pool.end();
+  }
 }
 
-// Run the initialization
 initializeDatabase();

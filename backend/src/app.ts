@@ -4,8 +4,11 @@ import { errorHandler } from './middleware/auth';
 import meetingRoutes from './routes/meeting.routes';
 import taskRoutes from './routes/task.routes';
 import userRoutes from './routes/user.routes';
+import { clerkMiddleware } from '@clerk/express';
 
 const app = express();
+
+app.use(clerkMiddleware());
 
 app.use(cors());
 app.use(express.json());
