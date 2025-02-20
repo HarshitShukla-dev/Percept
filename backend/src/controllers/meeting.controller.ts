@@ -40,23 +40,24 @@ export const MeetingController = {
                 return;
             }
 
-            // Assuming the MP3 file is in the request body
-            const audioBuffer = req.file.buffer; // or req.body.audio if sent as raw data
+            const audioBuffer = req.file.buffer;
             console.log(`Processing audio: ${audioBuffer.length} bytes`);
 
-            // Transcription logic here
-            const transcript = await transcribeAudio(audioBuffer); // Replace with actual transcription function
+            const transcript = await transcribeAudio(audioBuffer);
 
             if (!transcript) {
                 res.status(500).json({ success: false, error: 'Failed to transcribe audio' });
                 return;
             }
 
-            const { summary, tasks } = await processTranscript(transcript);
+            const { summary, tasks, meetingDetails, keyPoints } = await processTranscript(transcript);
 
             const updatedMeeting = await MeetingModel.update(parseInt(meetingId), {
                 transcript,
-                summary
+                summary,
+                meeting_date: !meetingDetails.date || meetingDetails.date === 'not specified' ? null : new Date(meetingDetails.date),
+                meeting_time: meetingDetails.time === 'not specified' ? null : meetingDetails.time,
+                key_points: keyPoints
             });
 
             const createdTasks = await Promise.all(
@@ -74,7 +75,9 @@ export const MeetingController = {
                 success: true,
                 data: {
                     meeting: updatedMeeting,
-                    tasks: createdTasks
+                    tasks: createdTasks,
+                    meetingDetails,
+                    keyPoints
                 }
             });
             return;
@@ -105,5 +108,52 @@ export const MeetingController = {
             res.status(500).json({ success: false, error: 'Failed to get meetings' });
             return
         }
+    },
+
+    async getMeetingById(req: Request, res: Response) {
+        try {
+            const { meetingId } = req.params;
+            const meeting = await MeetingModel.findById(parseInt(meetingId));
+            if (!meeting) {
+                res.status(404).json({ success: false, error: 'Meeting not found' });
+                return
+            }
+            res.json({ success: true, data: meeting });
+        } catch (error) {
+            console.error("Error getting meeting by ID:", error);
+            res.status(500).json({ success: false, error: 'Failed to get meeting' });
+        }
+    },
+
+    async updateMeeting(req: Request, res: Response) {
+        try {
+            const { meetingId } = req.params;
+            const updatedMeeting = await MeetingModel.update(parseInt(meetingId), req.body);
+            if (!updatedMeeting) {
+                res.status(404).json({ success: false, error: 'Meeting not found' });
+                return
+            }
+            res.json({ success: true, data: updatedMeeting });
+        } catch (error) {
+            console.error("Error updating meeting:", error);
+            res.status(500).json({ success: false, error: 'Failed to update meeting' });
+        }
+    },
+
+    async deleteMeeting(req: Request, res: Response) {
+        try {
+            const { meetingId } = req.params;
+            await TaskModel.deleteByMeetingId(parseInt(meetingId));
+            const deletedMeeting = await MeetingModel.delete(parseInt(meetingId));
+            if (!deletedMeeting) {
+                res.status(404).json({ success: false, error: 'Meeting not found' });
+                return
+            }
+            res.json({ success: true, data: deletedMeeting });
+        } catch (error) {
+            console.error("Error deleting meeting:", error);
+            res.status(500).json({ success: false, error: 'Failed to delete meeting' });
+        }
     }
+
 };
