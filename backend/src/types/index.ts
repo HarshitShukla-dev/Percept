@@ -11,8 +11,10 @@ export interface Meeting {
     title: string | null;
     transcript: string;
     summary: string | null;
-    meeting_date: Date;
+    meeting_date: Date | null;
+    meeting_time: string | null;
     participants: string[];
+    key_points: string[];
     created_at: Date;
     updated_at: Date;
 }
