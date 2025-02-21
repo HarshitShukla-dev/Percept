@@ -1,22 +1,28 @@
-import Button from "@/components/Button";
-import { Alert, Text, View } from "react-native";
+import { SignOutButton } from '@/components/Button/signoutButton'
+import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
+import { Link } from 'expo-router'
+import { Text, View, Image } from 'react-native'
 
-export default function Index() {
+export default function Page() {
+  const { user } = useUser()
+
   return (
-    <View className="flex-1 items-center justify-center gap-y-2">
-      <View className="items-center">
-        <Text className="text-4xl">Welcome to NativeWind!</Text>
-        <Text className="text-xl">Style your app with</Text>
-        <Text className="text-3xl bg-yellow-100 font-bold underline">
-          Tailwind CSS!
-        </Text>
-      </View>
-      <Button
-        label="Sounds good!"
-        onPress={() => {
-          Alert.alert("NativeWind", "You're all set up!");
-        }}
-      />
+    <View className='flex-1 justify-center items-center bg-black p-4'>
+      <SignedIn>
+        <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
+        <SignOutButton />
+      </SignedIn>
+      <SignedOut>
+        <View className='justify-center items-center gap-4 w-full'>
+          <Image source={require('../assets/icon.png')} className='w-64 h-64' />
+          <Link href="/auth/sign-in" className='bg-white p-4 rounded-full w-[80%] font-semibold text-black text-lg text-center'>
+            <Text>Sign in</Text>
+          </Link>
+          <Link href="/auth/sign-up" className='bg-[#141414] p-4 border border-gray-500 rounded-full w-[80%] font-semibold text-white text-lg text-center'>
+            <Text>Sign up</Text>
+          </Link>
+        </View>
+      </SignedOut>
     </View>
-  );
+  )
 }
