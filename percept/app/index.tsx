@@ -1,6 +1,6 @@
 import { SignOutButton } from '@/components/Button/signoutButton'
 import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
-import { Link } from 'expo-router'
+import { Link, Redirect } from 'expo-router'
 import { Text, View, Image } from 'react-native'
 
 export default function Page() {
@@ -9,8 +9,7 @@ export default function Page() {
   return (
     <View className='flex-1 justify-center items-center bg-black p-4'>
       <SignedIn>
-        <Text>Hello {user?.emailAddresses[0].emailAddress}</Text>
-        <SignOutButton />
+        <Redirect href='/meetings/' />
       </SignedIn>
       <SignedOut>
         <View className='justify-center items-center gap-4 w-full'>
