@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <View className='flex-1 justify-center items-center bg-black p-4'>
       <SignedIn>
-        <Redirect href='/meetings/' />
+        <Redirect href={'/app/meetings'} />
       </SignedIn>
       <SignedOut>
         <View className='flex-1 justify-center items-center gap-4 w-full'>
