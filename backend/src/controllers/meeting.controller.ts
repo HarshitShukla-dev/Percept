@@ -41,7 +41,6 @@ export const MeetingController = {
             }
 
             const audioBuffer = req.file.buffer;
-            console.log(`Processing audio: ${audioBuffer.length} bytes`);
 
             const transcript = await transcribeAudio(audioBuffer);
 
