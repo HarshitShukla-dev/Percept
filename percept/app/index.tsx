@@ -12,7 +12,7 @@ export default function Page() {
         <Redirect href='/meetings/' />
       </SignedIn>
       <SignedOut>
-        <View className='justify-center items-center gap-4 w-full'>
+        <View className='flex-1 justify-center items-center gap-4 w-full'>
           <Image source={require('../assets/icon.png')} className='w-64 h-64' />
           <Link href="/auth/sign-in" className='bg-white p-4 rounded-full w-[80%] font-semibold text-black text-lg text-center'>
             <Text>Sign in</Text>
