@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "swc src -d dist --copy-files",
-    "start": "swc src -d dist --copy-files && node dist/src/server.js",
+    "start": "node dist/src/server.js",
     "init-db": "ts-node src/scripts/init-db.ts",
     "drop-db": "ts-node src/scripts/drop-tables.ts"
   },
