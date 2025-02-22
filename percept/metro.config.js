@@ -15,7 +15,10 @@ const configWithMonicon = withMonicon(config, {
         "ph:calendar-check",
         "ph:calendar-check-fill",
         "ph:calendar",
-        "ph:plus"
+        "ph:plus",
+        "ph:arcticons:robotfindskitten-alt",
+        "ph:caret-right",
+        "ph:caret-left",
     ],
     // collections: [], // Optional: Specify the icon collections to be used.
 });
