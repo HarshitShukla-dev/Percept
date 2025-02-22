@@ -19,7 +19,7 @@ export default function TasksScreen() {
     );
 
     return (
-        <View>
+        <View className='flex-1 bg-black p-4 text-white'>
             <FlatList
                 data={tasksData}
                 renderItem={renderTaskItem}
