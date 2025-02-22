@@ -13,6 +13,7 @@
     "@clerk/types": "^4.46.1",
     "@monicon/metro": "^1.2.2",
     "@monicon/native": "^1.2.2",
+    "axios": "^1.7.9",
     "expo": "^52.0.16",
     "expo-constants": "~17.0.3",
     "expo-linking": "~7.0.3",

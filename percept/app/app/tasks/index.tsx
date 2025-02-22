@@ -12,9 +12,9 @@ const tasksData = [
 export default function TasksScreen() {
     const renderTaskItem = ({ item }: { item: { id: number; title: string; description: string; deadline: string } }) => (
         <View>
-            <Text>{item.title}</Text>
-            <Text>{item.description}</Text>
-            <Text>Deadline: {item.deadline}</Text>
+            <Text className='text-white'>{item.title}</Text>
+            <Text className='text-white'>{item.description}</Text>
+            <Text className='text-white'>Deadline: {item.deadline}</Text>
         </View>
     );
 

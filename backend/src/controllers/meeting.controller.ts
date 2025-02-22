@@ -54,7 +54,7 @@ export const MeetingController = {
             const updatedMeeting = await MeetingModel.update(parseInt(meetingId), {
                 transcript,
                 summary,
-                meeting_date: !meetingDetails.date || meetingDetails.date === 'not specified' ? null : new Date(meetingDetails.date),
+                meeting_date: meetingDetails.date === 'not specified' ? null : meetingDetails.date,
                 meeting_time: meetingDetails.time === 'not specified' ? null : meetingDetails.time,
                 key_points: keyPoints
             });

@@ -9,7 +9,8 @@ declare module "@monicon/icon-loader" {
 	| "ph:presentation-fill"
 	| "ph:calendar-check"
 	| "ph:calendar-check-fill"
-	| "ph:calendar";
+	| "ph:calendar"
+	| "ph:plus";
 
   export type MoniconProps = {
     /**

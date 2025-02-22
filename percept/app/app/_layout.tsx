@@ -2,13 +2,11 @@ import { Tabs } from 'expo-router';
 import { Monicon } from '@monicon/native';
 import { Pressable, View } from 'react-native';
 
-// Function to get the correct icon based on the screen name and focus state
 const getIcon = (
     routeName: string,
     color: string,
     focused: boolean
 ) => {
-    // Extract the base route name (e.g., 'meetings' from 'meetings/index')
     const baseRoute = routeName.split('/')[0] as 'meetings' | 'tasks' | 'profile';
 
     const icons = {
@@ -26,7 +24,8 @@ export default function TabLayout() {
         <Tabs
             screenOptions={({ route }) => ({
                 headerShown: false,
-                tabBarActiveTintColor: '#c76534',
+                tabBarInactiveTintColor: '#5e5e5e',
+                tabBarActiveTintColor: 'white',
                 tabBarButton: (props) => (
                     <Pressable
                         onPress={props.onPress}
@@ -46,7 +45,7 @@ export default function TabLayout() {
                         {getIcon(route.name, color, focused)}
                         {focused && (
                             <View
-                                className='right-0 bottom-[-8] left-0 absolute bg-[#c76534] mx-auto rounded-xl w-[50%] h-[2.4px] ]'
+                                className='right-0 bottom-[-8] left-0 absolute bg-white mx-auto rounded-xl w-[50%] h-[2.4px] ]'
                                 style={{
                                     left: '50%',
                                     transform: [{ translateX: '-50%' }],

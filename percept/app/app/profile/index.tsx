@@ -6,7 +6,7 @@ export default function ProfileScreen() {
   return ( 
     <View className='flex-1 bg-black p-4'>
       <View>
-        <Text>Profile Screen Content (Placeholder)</Text>
+        <Text className='text-white'>Profile Screen Content (Placeholder)</Text>
         {/* Add a placeholder button for Logout later */}
         <SignOutButton/>
       </View>

@@ -1,6 +1,6 @@
-import { getDefaultConfig } from "expo/metro-config";
-import { withNativeWind } from "nativewind/metro";
-import { withMonicon } from "@monicon/metro";
+const { getDefaultConfig } = require("expo/metro-config");
+const { withNativeWind } = require("nativewind/metro");
+const { withMonicon } = require("@monicon/metro");
 
 const config = getDefaultConfig(__dirname);
 
@@ -15,8 +15,9 @@ const configWithMonicon = withMonicon(config, {
         "ph:calendar-check",
         "ph:calendar-check-fill",
         "ph:calendar",
+        "ph:plus"
     ],
     // collections: [], // Optional: Specify the icon collections to be used.
 });
 
-export default withNativeWind(configWithMonicon, { input: "./global.css" });
+module.exports = withNativeWind(configWithMonicon, { input: "./global.css" });
