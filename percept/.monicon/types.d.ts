@@ -13,7 +13,11 @@ declare module "@monicon/icon-loader" {
 	| "ph:plus"
 	| "ph:arcticons:robotfindskitten-alt"
 	| "ph:caret-right"
-	| "ph:caret-left";
+	| "ph:caret-left"
+	| "ph:microphone"
+	| "ph:stop-fill"
+	| "ph:upload"
+	| "ph:waveform";
 
   export type MoniconProps = {
     /**

@@ -54,5 +54,25 @@ module.exports = {
     "svg": "<svg viewBox=\"0 0 256 256\" width=\"1em\" height=\"1em\" ><path fill=\"currentColor\" d=\"M165.66 202.34a8 8 0 0 1-11.32 11.32l-80-80a8 8 0 0 1 0-11.32l80-80a8 8 0 0 1 11.32 11.32L91.31 128Z\"/></svg>",
     "width": 16,
     "height": 16
+  },
+  "ph:microphone": {
+    "svg": "<svg viewBox=\"0 0 256 256\" width=\"1em\" height=\"1em\" ><path fill=\"currentColor\" d=\"M128 176a48.05 48.05 0 0 0 48-48V64a48 48 0 0 0-96 0v64a48.05 48.05 0 0 0 48 48M96 64a32 32 0 0 1 64 0v64a32 32 0 0 1-64 0Zm40 143.6V240a8 8 0 0 1-16 0v-32.4A80.11 80.11 0 0 1 48 128a8 8 0 0 1 16 0a64 64 0 0 0 128 0a8 8 0 0 1 16 0a80.11 80.11 0 0 1-72 79.6\"/></svg>",
+    "width": 16,
+    "height": 16
+  },
+  "ph:stop-fill": {
+    "svg": "<svg viewBox=\"0 0 256 256\" width=\"1em\" height=\"1em\" ><path fill=\"currentColor\" d=\"M216 56v144a16 16 0 0 1-16 16H56a16 16 0 0 1-16-16V56a16 16 0 0 1 16-16h144a16 16 0 0 1 16 16\"/></svg>",
+    "width": 16,
+    "height": 16
+  },
+  "ph:upload": {
+    "svg": "<svg viewBox=\"0 0 256 256\" width=\"1em\" height=\"1em\" ><path fill=\"currentColor\" d=\"M240 136v64a16 16 0 0 1-16 16H32a16 16 0 0 1-16-16v-64a16 16 0 0 1 16-16h48a8 8 0 0 1 0 16H32v64h192v-64h-48a8 8 0 0 1 0-16h48a16 16 0 0 1 16 16M85.66 77.66L120 43.31V128a8 8 0 0 0 16 0V43.31l34.34 34.35a8 8 0 0 0 11.32-11.32l-48-48a8 8 0 0 0-11.32 0l-48 48a8 8 0 0 0 11.32 11.32M200 168a12 12 0 1 0-12 12a12 12 0 0 0 12-12\"/></svg>",
+    "width": 16,
+    "height": 16
+  },
+  "ph:waveform": {
+    "svg": "<svg viewBox=\"0 0 256 256\" width=\"1em\" height=\"1em\" ><path fill=\"currentColor\" d=\"M56 96v64a8 8 0 0 1-16 0V96a8 8 0 0 1 16 0m32-72a8 8 0 0 0-8 8v192a8 8 0 0 0 16 0V32a8 8 0 0 0-8-8m40 32a8 8 0 0 0-8 8v128a8 8 0 0 0 16 0V64a8 8 0 0 0-8-8m40 32a8 8 0 0 0-8 8v64a8 8 0 0 0 16 0V96a8 8 0 0 0-8-8m40-16a8 8 0 0 0-8 8v96a8 8 0 0 0 16 0V80a8 8 0 0 0-8-8\"/></svg>",
+    "width": 16,
+    "height": 16
   }
 };

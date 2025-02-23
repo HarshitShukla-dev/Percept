@@ -19,6 +19,10 @@ const configWithMonicon = withMonicon(config, {
         "ph:arcticons:robotfindskitten-alt",
         "ph:caret-right",
         "ph:caret-left",
+        "ph:microphone",
+        "ph:stop-fill",
+        "ph:upload",
+        "ph:waveform",
     ],
     // collections: [], // Optional: Specify the icon collections to be used.
 });

@@ -5,6 +5,7 @@ import { createApiInstance } from '@/utils/api';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import Skeleton from '@/components/Skeleton';
 import { router } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function MeetingsScreen() {
     const [meetingsData, setMeetingsData] = useState<{ id: number; title: string; meeting_date: string; meeting_time: string; summary: string; created_at: string; }[]>([]);
@@ -41,9 +42,11 @@ export default function MeetingsScreen() {
         }
     }, []);
 
-    useEffect(() => {
-        fetchMeetings();
-    }, [fetchMeetings]);
+    useFocusEffect(
+        useCallback(() => {
+            fetchMeetings();
+        }, [fetchMeetings])
+    );
 
     const getRandomPastelColor = useCallback(() => {
         const pastelColors = [
@@ -55,7 +58,7 @@ export default function MeetingsScreen() {
     }, []);
 
     const renderMeetingItem = useMemo(() => ({ item }: { item: { id: number; title: string; meeting_date: string; meeting_time: string; summary: string; created_at: string; } }) => (
-        <TouchableOpacity className='justify-between mt-4 p-4 rounded-lg w-full h-56' style={{ backgroundColor: getRandomPastelColor() }} onPress={() => {router.navigate(`/meetings/${item.id}`)}} activeOpacity={0.7}>
+        <TouchableOpacity className='justify-between mt-4 p-4 rounded-lg w-full h-56' style={{ backgroundColor: getRandomPastelColor() }} onPress={() => { router.navigate(`/meetings/${item.id}`) }} activeOpacity={0.7}>
             <View>
                 <View className='flex-row items-center gap-1'>
                     <Monicon name='ph:calendar' size={18} color='#78716c' />
@@ -109,7 +112,7 @@ export default function MeetingsScreen() {
                     />
                 </>
             )}
-            <Pressable className='right-8 bottom-3 absolute flex justify-center items-center bg-black border border-stone-800 rounded-full w-14 h-14' android_ripple={{ color: 'grey', radius: 25 }} >
+            <Pressable className='right-8 bottom-3 absolute flex justify-center items-center bg-black border border-stone-800 rounded-full w-14 h-14' android_ripple={{ color: 'grey', radius: 25 }} onPress={() => { router.navigate('/meetings/create') }}>
                 <Monicon name='ph:plus' size={24} color='white' />
             </Pressable>
         </View>

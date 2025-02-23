@@ -10,11 +10,29 @@
       "output": "static"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
     },
-    "scheme": "myapp"
+    "scheme": "myapp",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "4b760b0d-74a0-4c16-8c52-7d7a61942411"
+      }
+    },
+    "owner": "harshitshukla",
+    "android": {
+      "package": "com.harshitshukla.percept"
+    }
   }
 }
