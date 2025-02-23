@@ -16,13 +16,14 @@ const configWithMonicon = withMonicon(config, {
         "ph:calendar-check-fill",
         "ph:calendar",
         "ph:plus",
-        "ph:arcticons:robotfindskitten-alt",
+        "arcticons:robotfindskitten-alt",
         "ph:caret-right",
         "ph:caret-left",
         "ph:microphone",
         "ph:stop-fill",
         "ph:upload",
         "ph:waveform",
+        "ph:github-logo-fill"
     ],
     // collections: [], // Optional: Specify the icon collections to be used.
 });

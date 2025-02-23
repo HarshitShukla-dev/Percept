@@ -95,9 +95,9 @@ export default function MeetingsScreen() {
                 </>
             ) : error ? (
                 <View className='flex-1 justify-center items-center p-4'>
-                    <Text className='-mt-12 text-[#ff0000] text-lg text-center'>An error occurred! Please try restarting the app.</Text>
+                    <Text className='-mt-12 text-[#ff0000] text-lg text-center'>{error} An error occurred! Please try restarting the app.</Text>
                 </View>
-            ) : !meetingsData ? (
+            ) : meetingsData.length < 1 ? (
                 <View className='flex-1 justify-center items-center p-4'>
                     <Monicon name="arcticons:robotfindskitten-alt" size={192} color='grey' />
                     <Text className='-mt-12 text-stone-400 text-lg text-center'>There are no meetings as of now. You can create one by clicking on the plus icon.</Text>

@@ -40,7 +40,7 @@ module.exports = {
     "width": 16,
     "height": 16
   },
-  "ph:arcticons:robotfindskitten-alt": {
+  "arcticons:robotfindskitten-alt": {
     "svg": "<svg viewBox=\"0 0 48 48\" width=\"1em\" height=\"1em\" ><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M22.83 21.358a1.386 1.386 0 0 0-1.076 2.26l2.222 2.609l2.2-2.583l.01-.012l.012-.014a1.387 1.387 0 1 0-2.222-1.653a1.38 1.38 0 0 0-1.145-.607zm-12.722-3.897c3.095 0 5.604 2.475 5.604 5.528v.79H4.505v-.79c0-3.053 2.509-5.528 5.604-5.528zm-4.839-.826l1.592 1.849m8.086-1.849l-1.592 1.849\"/><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12.657\" cy=\"21.23\" r=\"1.02\"/><circle cx=\"7.559\" cy=\"21.23\" r=\"1.02\"/><circle cx=\"39.167\" cy=\"24.795\" r=\"1.02\"/><circle cx=\"34.069\" cy=\"24.795\" r=\"1.02\"/><path d=\"m31.01 16.638l4.078 5.098h3.06l4.077-5.098v14.275H31.01z\"/></g><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M29.735 28.873h2.549m-2.549-1.529h2.549m8.667 1.529H43.5m-2.549-1.529H43.5m-6.882 1.019v-1.332m0 1.332l-.805.998m-.361-1.73l1.166.732m0 0l.804.998m.361-1.73l-1.165.732M4.5 23.774h11.216v5.608H4.5z\"/><circle cx=\"7.608\" cy=\"30.615\" r=\".75\" fill=\"currentColor\"/><circle cx=\"12.608\" cy=\"30.615\" r=\".75\" fill=\"currentColor\"/></svg>",
     "width": 16,
     "height": 16
@@ -72,6 +72,11 @@ module.exports = {
   },
   "ph:waveform": {
     "svg": "<svg viewBox=\"0 0 256 256\" width=\"1em\" height=\"1em\" ><path fill=\"currentColor\" d=\"M56 96v64a8 8 0 0 1-16 0V96a8 8 0 0 1 16 0m32-72a8 8 0 0 0-8 8v192a8 8 0 0 0 16 0V32a8 8 0 0 0-8-8m40 32a8 8 0 0 0-8 8v128a8 8 0 0 0 16 0V64a8 8 0 0 0-8-8m40 32a8 8 0 0 0-8 8v64a8 8 0 0 0 16 0V96a8 8 0 0 0-8-8m40-16a8 8 0 0 0-8 8v96a8 8 0 0 0 16 0V80a8 8 0 0 0-8-8\"/></svg>",
+    "width": 16,
+    "height": 16
+  },
+  "ph:github-logo-fill": {
+    "svg": "<svg viewBox=\"0 0 256 256\" width=\"1em\" height=\"1em\" ><path fill=\"currentColor\" d=\"M216 104v8a56.06 56.06 0 0 1-48.44 55.47A39.8 39.8 0 0 1 176 192v40a8 8 0 0 1-8 8h-64a8 8 0 0 1-8-8v-16H72a40 40 0 0 1-40-40a24 24 0 0 0-24-24a8 8 0 0 1 0-16a40 40 0 0 1 40 40a24 24 0 0 0 24 24h24v-8a39.8 39.8 0 0 1 8.44-24.53A56.06 56.06 0 0 1 56 112v-8a58.14 58.14 0 0 1 7.69-28.32A59.78 59.78 0 0 1 69.07 28A8 8 0 0 1 76 24a59.75 59.75 0 0 1 48 24h24a59.75 59.75 0 0 1 48-24a8 8 0 0 1 6.93 4a59.74 59.74 0 0 1 5.37 47.68A58 58 0 0 1 216 104\"/></svg>",
     "width": 16,
     "height": 16
   }

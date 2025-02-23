@@ -3,7 +3,7 @@ import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, Text, TextInput, View, Alert, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import { useAuth } from '@clerk/clerk-expo';
+import { useAuth, useUser } from '@clerk/clerk-expo';
 import { createApiInstance } from '@/utils/api';
 
 interface AudioFile {
@@ -37,6 +37,8 @@ export default function App() {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+    const { user } = useUser();
+    const recipientEmail = user?.primaryEmailAddress;
 
     const toggleRecording = () => {
         if (recording) {
@@ -95,7 +97,6 @@ export default function App() {
             }
             const api = createApiInstance(token);
 
-            // First create the meeting
             const meetingResponse = await api.post<MeetingResponse>('/meetings', {
                 title: meetingName,
                 meeting_date: new Date().toISOString().split('T')[0],
@@ -115,7 +116,13 @@ export default function App() {
                 name: audioFile.name ?? 'audiofile.mp3',
             } as any);
 
-            const uploadResponse = await api.post(
+            const token2 = await getToken();
+            if (!token2) {
+                setError('Failed to fetch token');
+                return;
+            }
+            const api2 = createApiInstance(token2);
+            const uploadResponse = await api2.post(
                 `/meetings/${meetingId}/process`,
                 formData,
                 {
@@ -132,8 +139,18 @@ export default function App() {
             );
 
             if (uploadResponse.status === 200) {
-                Alert.alert('Success', 'Meeting created and audio processed successfully');
-                router.back();
+                const token3 = await getToken();
+                if (!token3) {
+                    setError('Failed to fetch token');
+                    return;
+                }
+                const api3 = createApiInstance(token3);
+                await api3.post(`/meetings/${meetingId}/share-email`, {
+                    recipientEmail: recipientEmail?.emailAddress
+                });
+
+                Alert.alert('Success', 'Meeting created and summary sent to email');
+                router.navigate(`/meetings/${meetingId}`);
             } else {
                 throw new Error('Failed to process audio');
             }
@@ -187,7 +204,7 @@ export default function App() {
                 <Pressable onPress={pickAudioFile}>
                     <Text className='mt-4 text-stone-200 underline'>Upload a file</Text>
                 </Pressable>
-                
+
                 {audioFile.name && (
                     <Text className='mt-2 text-stone-400'>
                         Selected: {audioFile.name}
@@ -196,7 +213,7 @@ export default function App() {
             </View>
 
             {isLoading && (
-                <View className='absolute inset-0 justify-center items-center bg-black/50'>
+                <View className='absolute inset-0 justify-center items-center bg-stone-950'>
                     <ActivityIndicator size="large" color="white" />
                     {uploadProgress > 0 && (
                         <View className='mt-4'>
@@ -204,9 +221,9 @@ export default function App() {
                                 Uploading: {uploadProgress}%
                             </Text>
                             <View className='bg-stone-800 mt-2 rounded-full w-64 h-2'>
-                                <View 
-                                    className='bg-white rounded-full h-full' 
-                                    style={{ width: `${uploadProgress}%` }} 
+                                <View
+                                    className='bg-white rounded-full h-full'
+                                    style={{ width: `${uploadProgress}%` }}
                                 />
                             </View>
                         </View>
@@ -215,8 +232,8 @@ export default function App() {
             )}
 
             <View className='p-4'>
-                <Pressable 
-                    className='bg-stone-950 p-4 rounded-full' 
+                <Pressable
+                    className='bg-stone-950 p-4 rounded-full'
                     onPress={createMeeting}
                     disabled={isLoading}
                 >

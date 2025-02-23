@@ -1,25 +1,50 @@
-// app/tasks/index.tsx
-import React from 'react';
-import { View, Text, FlatList } from 'react-native';
-
-// Placeholder tasks data (replace with API calls later)
-const tasksData = [
-    { id: 1, title: 'Prepare Presentation', description: 'Create slides for the project update.', deadline: '2024-03-12' },
-    { id: 2, title: 'Sprint Review Meeting', description: 'Schedule and conduct sprint review.', deadline: '2024-03-18' },
-    { id: 3, title: 'Follow up with John', description: 'Regarding action items from last meeting.', deadline: '2024-03-25' },
-];
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { useAuth } from '@clerk/clerk-expo';
+import { createApiInstance } from '@/utils/api';
+import Checkbox from 'expo-checkbox';
 
 export default function TasksScreen() {
+    const { getToken } = useAuth();
+    const [tasksData, setTasksData] = useState([]);
+    const [checkedTasks, setCheckedTasks] = useState<Record<number, boolean>>({});
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const token = await getToken();
+            if (!token) return;
+            const api = createApiInstance(token);
+            const response = await api.get('/tasks');
+            if (response.data.success) {
+                setTasksData(response.data.data);
+            }
+        };
+
+        fetchTasks();
+    }, []);
+
     const renderTaskItem = ({ item }: { item: { id: number; title: string; description: string; deadline: string } }) => (
-        <View>
-            <Text className='text-white'>{item.title}</Text>
-            <Text className='text-white'>{item.description}</Text>
-            <Text className='text-white'>Deadline: {item.deadline}</Text>
-        </View>
+        <TouchableOpacity onPress={() => setCheckedTasks(prev => ({ ...prev, [item.id]: !prev[item.id] }))}>
+            <View className='flex-row items-center bg-[#181818] mt-2 p-2 border border-[#292929] rounded-lg'>
+                <Checkbox
+                    className='mr-4'
+                    value={checkedTasks[item.id] || false} />
+                <View className='flex-1'>
+                    <Text className={`font-bold ${checkedTasks[item.id] ? 'line-through text-gray-500' : 'text-white'}`}>
+                        {item.title}
+                    </Text>
+                    <Text className={` ${checkedTasks[item.id] ? 'line-through text-gray-500' : 'text-gray-400'}`}>
+                        {item.description}
+                    </Text>
+                    <Text className='text-gray-500'>Deadline: {new Date(item.deadline).toLocaleDateString()}</Text>
+                </View>
+            </View>
+        </TouchableOpacity>
     );
 
     return (
-        <View className='flex-1 bg-black p-4 text-white'>
+        <View className='flex-1 bg-black p-4'>
+            <Text className='mb-3 text-white text-2xl'>Your Tasks</Text>
             <FlatList
                 data={tasksData}
                 renderItem={renderTaskItem}
