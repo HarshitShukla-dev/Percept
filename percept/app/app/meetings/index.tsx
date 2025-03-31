@@ -24,6 +24,7 @@ export default function MeetingsScreen() {
             }
             const api = createApiInstance(token);
             const response = await api.get('/meetings');
+            console.log(response.data);
 
             if (response.data.success) {
                 const sortedMeetings = response.data.data.sort((a: any, b: any) => {
