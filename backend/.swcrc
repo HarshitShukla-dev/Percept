@@ -2,11 +2,28 @@
   "jsc": {
     "parser": {
       "syntax": "typescript",
-      "tsx": false
+      "tsx": false,
+      "decorators": false,
+      "dynamicImport": false
     },
-    "target": "es2020"
+    "transform": {},
+    "target": "es2024",
+    "loose": false,
+    "externalHelpers": false,
+    "keepClassNames": false,
+    "minify": {
+      "compress": {
+        "unused": true,
+        "dead_code": true,
+        "conditionals": true,
+        "booleans": true,
+        "evaluate": true
+      },
+      "mangle": true
+    }
   },
   "module": {
     "type": "commonjs"
-  }
+  },
+  "minify": true
 }
