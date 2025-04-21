@@ -60,14 +60,39 @@ export const MeetingController = {
             });
 
             const createdTasks = await Promise.all(
-                tasks.map((task: any) => TaskModel.create({
-                    title: task.title,
-                    description: task.description,
-                    user_id: meeting.user_id,
-                    meeting_id: meeting.id,
-                    deadline: task.deadline ? new Date(task.deadline) : null,
-                    status: task.status || 'PENDING'
-                }))
+                tasks.map(async (task: any) => {
+                    // Validate deadline before trying to create a Date object
+                    let deadlineDate = null;
+
+                    if (task.deadline && task.deadline !== 'not specified') {
+                        try {
+                            // Check if deadline format is valid YYYY-MM-DD
+                            if (/^\d{4}-\d{2}-\d{2}$/.test(task.deadline)) {
+                                deadlineDate = new Date(task.deadline);
+
+                                // Validate that the date is valid
+                                if (isNaN(deadlineDate.getTime())) {
+                                    deadlineDate = null;
+                                    console.log(`Invalid date format detected: ${task.deadline}, setting to null`);
+                                }
+                            } else {
+                                console.log(`Unsupported date format detected: ${task.deadline}, setting to null`);
+                            }
+                        } catch (error) {
+                            console.error(`Error parsing date: ${task.deadline}`, error);
+                            deadlineDate = null;
+                        }
+                    }
+
+                    return TaskModel.create({
+                        title: task.title,
+                        description: task.description,
+                        user_id: meeting.user_id,
+                        meeting_id: meeting.id,
+                        deadline: deadlineDate,
+                        status: task.status || 'PENDING'
+                    });
+                })
             );
 
             res.json({

@@ -53,12 +53,12 @@ export const processTranscript = async (transcript: string): Promise<IAIResponse
     2.  **Action Items/Tasks:** Identify all actionable tasks discussed. For each task, extract:
         -   **Title:** A short, action-oriented title.
         -   **Description:**  A more detailed explanation of the task if available. If not, use the relevant sentence from the transcript as description or leave blank if no description is naturally found.
-        -   **Deadline:** Extract any mentioned deadlines or due dates for the task. If no deadline is mentioned, indicate as 'not specified'.
+        -   **Deadline:** Extract any mentioned deadlines or due dates for the task. If no deadline is mentioned, use exactly "not specified". Use YYYY-MM-DD format for dates (e.g., 2025-01-05) and HH:MM format for times (e.g., 15:30).
     3.  **Meeting Details:** Extract the date and time of the meeting if mentioned.
-        -   **Date:** Extract the meeting date. If not mentioned, indicate 'not specified'.
-        -   **Time:** Extract the meeting time. If not mentioned, indicate 'not specified'.
+        -   **Date:** Extract the meeting date in YYYY-MM-DD format. If not mentioned, use exactly "not specified".
+        -   **Time:** Extract the meeting time in HH:MM format. If not mentioned, use exactly "not specified".
     4.  **Key Discussion Points:** Identify and list the key topics or discussion points from the meeting in bullet points or a numbered list.
-    5, **Year** This is the year 2025. so keep this in mind while extracting the date and time. So if the date is mentioned as 5th of January, 2025, it should be extracted as 2025-01-05. Similarly, if the time is mentioned as 3:30 PM, it should be extracted as 15:30. Stricly adhere to this format. If in the transcript, the date is mentioned as lets say month only, then you can extract it as 2025-01-01. Similarly, if the time is mentioned as morning, you can extract it as 09:00 and if it is mentioned as evening, you can extract it as 18:00.
+    5.  **Year** This is the year 2025, so keep this in mind while extracting dates. If the date is mentioned as "5th of January", it should be extracted as "2025-01-05". Only use a specific date format if it's clearly mentioned; otherwise use "not specified".
 
     Transcript:
     \`\`\`
@@ -74,18 +74,18 @@ export const processTranscript = async (transcript: string): Promise<IAIResponse
         {
           "title": "Task title 1",
           "description": "Task description 1",
-          "deadline": "Deadline for task 1 (YYYY-MM-DD format if date, HH:MM format if time, or 'not specified')"
+          "deadline": "not specified"
         },
         {
           "title": "Task title 2",
           "description": "Task description 2",
-          "deadline": "Deadline for task 2 (YYYY-MM-DD format if date, HH:MM format if time, or 'not specified')"
+          "deadline": "2025-01-05"
         },
         ...
       ],
       "meetingDetails": {
-        "date": "Meeting date (YYYY-MM-DD format or 'not specified')",
-        "time": "Meeting time (HH:MM format or 'not specified')"
+        "date": "2025-01-05",
+        "time": "15:30"
       },
       "keyPoints": [
         "Key point 1",
@@ -95,7 +95,10 @@ export const processTranscript = async (transcript: string): Promise<IAIResponse
     }
     \`\`\`
 
-    Ensure the JSON response is parsable and strictly adheres to the format above. For deadlines, dates and times, try to format them in 'YYYY-MM-DD' and 'HH:MM' format respectively when possible, otherwise return the extracted text or 'not specified'.
+    Important: For all deadline, date and time fields, only use one of two possible values:
+    1. Exact YYYY-MM-DD format for dates and HH:MM format for times, if explicitly mentioned
+    2. The exact string "not specified" if not mentioned
+    Do not include any other formats or text in these fields.
     `;
 
     const result = await model.generateContent(prompt);
@@ -106,10 +109,39 @@ export const processTranscript = async (transcript: string): Promise<IAIResponse
 
     try {
         const parsedResponse = JSON.parse(text) as IAIResponse;
+        
+        // Validate and sanitize date/time fields
+        if (parsedResponse.meetingDetails) {
+            if (parsedResponse.meetingDetails.date && 
+                parsedResponse.meetingDetails.date !== 'not specified' && 
+                !/^\d{4}-\d{2}-\d{2}$/.test(parsedResponse.meetingDetails.date)) {
+                parsedResponse.meetingDetails.date = 'not specified';
+            }
+            
+            if (parsedResponse.meetingDetails.time && 
+                parsedResponse.meetingDetails.time !== 'not specified' && 
+                !/^\d{2}:\d{2}$/.test(parsedResponse.meetingDetails.time)) {
+                parsedResponse.meetingDetails.time = 'not specified';
+            }
+        }
+
+        // Validate and sanitize task deadlines
+        if (parsedResponse.tasks && Array.isArray(parsedResponse.tasks)) {
+            parsedResponse.tasks = parsedResponse.tasks.map(task => {
+                if (task.deadline && 
+                    task.deadline !== 'not specified' && 
+                    !/^\d{4}-\d{2}-\d{2}$/.test(task.deadline) && 
+                    !/^\d{2}:\d{2}$/.test(task.deadline)) {
+                    task.deadline = 'not specified';
+                }
+                return task;
+            });
+        }
+        
         return parsedResponse;
     } catch (error) {
         console.error('Error parsing AI response JSON:', error);
-        console.error('AI Response Text (for debugging):', text); // Log the raw response text
+        console.error('AI Response Text (for debugging):', text);
         return {
             summary: "Error parsing AI response. Please check logs for details.",
             tasks: [],
