@@ -44,7 +44,7 @@ export const transcribeAudio = async (audioBuffer: Buffer): Promise<string> => {
 };
 
 export const processTranscript = async (transcript: string): Promise<IAIResponse> => {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
     const prompt = `
     Analyze the following meeting transcript and extract the following information. If a piece of information is not explicitly mentioned, indicate it as 'not specified' or leave it blank as appropriate in the JSON structure.
